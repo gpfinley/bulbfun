@@ -10,8 +10,8 @@ category_colors = [
     ((0, 255, 0), 100),		# good
     ((255, 155, 0), 100),	# moderate
     ((255, 70, 0), 100),	# unhealthy for sensitive groups
-    ((255, 0, 0), 100),		# unhealthy
-    ((255, 0, 255), 100),	# hazardous
+    ((255, 0, 0), 80),		# unhealthy
+    ((120, 0, 255), 100),	# hazardous
     ((255, 0, 140), 30),
 ]
 
