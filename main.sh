@@ -1,1 +1,2 @@
-python -m bulbfun.main
+git pull
+python3 -m bulbfun.main
