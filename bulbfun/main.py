@@ -44,7 +44,6 @@ def main():
     except:
         category = 0
 
-    category = 3
     (r, g, b), brightness = category_colors[category]
     bulb.set_rgb(r, g, b)
     bulb.set_brightness(brightness)
