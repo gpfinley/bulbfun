@@ -1,6 +1,11 @@
 import requests
+import time
 import logging
+from datetime import datetime
+
 from yeelight import Bulb, discover_bulbs
+
+stop_running_after = 5*60
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -17,6 +22,20 @@ category_colors = [
 
 
 def main():
+
+    # Look for the bulb and keep trying if it's not found.
+    # Assume five minutes between the job being kicked off again.
+    start = datetime.now()
+    bulbs = discover_bulbs()
+    while not len(bulbs):
+        time.sleep(2)
+        if (datetime.now() - start).total_seconds() > stop_running_after:
+            return
+        bulbs = discover_bulbs()
+    logger.info(bulbs)
+    bulb_ip = bulbs[0]['ip']
+    bulb = Bulb(bulb_ip)
+
     try:
         aqi_obj = requests.get('http://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&zipCode=94702&distance=1&API_KEY=E1C86A95-8F32-4EA5-8243-E19677A0550F').json()
         logger.info(aqi_obj)
@@ -25,12 +44,7 @@ def main():
     except:
         category = 0
 
-    bulbs = discover_bulbs()
-    logger.info(bulbs)
-    bulb_ip = bulbs[0]['ip']
-
-    bulb = Bulb(bulb_ip)
-
+    category = 3
     (r, g, b), brightness = category_colors[category]
     bulb.set_rgb(r, g, b)
     bulb.set_brightness(brightness)
