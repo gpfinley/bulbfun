@@ -39,7 +39,13 @@ def main():
     try:
         aqi_obj = requests.get('http://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&zipCode=94702&distance=1&API_KEY=E1C86A95-8F32-4EA5-8243-E19677A0550F').json()
         logger.info(aqi_obj)
-        pm25 = aqi_obj[1]
+        pm25 = None
+        for item in aqi_obj:
+            if item.get('ParameterName') == 'PM2.5':
+                pm25 = item
+                break
+        if pm25 is None:
+            pm25 = aqi_obj[1]
         category = pm25['Category']['Number']
     except:
         category = 0
